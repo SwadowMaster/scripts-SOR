@@ -1,0 +1,40 @@
+//añadir usuarios
+net user <usuario> contraseña add /domain
+For /F %i in (usuarios.txt) do net user %i 1234 /add /domain
+
+//modificar grupoos usuarios
+net group <grupo> <usuario> /add /domain
+net group "Admins. del dominio" "AdmDom-SHA" /add /domain 
+
+//modificar unidades organizativas ( uo )
+
+user -name <usuario>  // esto nos da informacion del usuario para ubicarlo en el siguiente comando
+
+dsadd ou "OU=Recursos Humanos,DC=midominio,DC=local" -desc "Unidad Organizativa para el departamento de RRHH" //Agregar UO
+
+dsmove <informacion del comando anterior> -newparent <igual que lo de antes pero con lo nuevo>   // puede usarse un for y es mas rápido
+
+runas /u:SHA-219.smr\usuario <comando>  //este comando puede ser la calculadora por ejemplo
+
+
+tasklist /v //muestra procesos
+taskkill /im <proceso> //mata al proceso
+
+//restricciones a los usuarios
+
+net user <usuario> /expires:never /domain                       //expira
+net user <usuario> /time:Dia,Hora-Hasta,Dia,Hora-Hasta /domain  // limitar horas de inicio de sesion puedes concatenar tantas dia hora como quieras
+net user <usuario> /time:all /domain                            //deslimita las horas de inicio de sesion
+time <tiempo>                                                   //establece la hora del sistema
+date <fecha>                                                    //establece la fecha del sistema
+
+net user <usuario> /workstations:< pc / * > /domain             //limita puestos de trabajo
+net user <usuario> /scriptpath:<path dentro de carpeta netlogon es la por defecto> /domain             //limita puestos de trabajo
+
+
+//script inicio sesion
+WScript.Echo("Hola usuario")
+
+
+
+reg add "HKCU/Software/Microsoft/Windows/CurrentVersion/"
